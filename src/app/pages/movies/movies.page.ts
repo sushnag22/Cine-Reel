@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
+import { InfiniteScrollCustomEvent, LoadingController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-movies',
@@ -7,13 +9,35 @@ import { MovieService } from '../../services/movie.service';
   styleUrls: ['./movies.page.scss'],
 })
 export class MoviesPage implements OnInit {
+  movies: any[] = [];
+  currentPage = 1;
+  imageBaseUrl = environment.imageUrl;
 
-  constructor(private movieService: MovieService) { }
+  constructor(private movieService: MovieService, private loadingCntrl: LoadingController) { }
 
   ngOnInit() {
-    this.movieService.getTopRatedMovies().subscribe(res => {
-      console.log('Discover movies: ', res);
+    this.loadMovies();
+  }
+
+  async loadMovies(event?: InfiniteScrollCustomEvent) {
+    const loading = await this.loadingCntrl.create({
+      message: 'Loading...',
+      spinner: 'crescent',
     });
+    await loading.present();
+    this.movieService.getTopRatedMovies(this.currentPage).subscribe(res => {
+      loading.dismiss();
+      this.movies.push(...res.results);
+      event?.target.complete();
+      if (event) {
+        event.target.disabled = res.total_pages === this.currentPage;
+      }
+    });
+  }
+
+  loadMore(event: InfiniteScrollCustomEvent) {
+    this.currentPage++;
+    this.loadMovies(event);
   }
 
 }
