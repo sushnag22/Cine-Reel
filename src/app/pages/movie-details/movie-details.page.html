@@ -1,9 +1,51 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>movieDetails</ion-title>
+  <ion-toolbar color = "primary">
+    <ion-title> {{ movie?.title }} </ion-title>
+    <ion-buttons slot = "start">
+      <ion-back-button defaultHref = "/movies">
+      </ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-card *ngIf="movie">
+    <img [src]="imageBaseUrl + '/w400/' + movie.poster_path" alt="movie-image"/>
+    <ion-card-header>
+      <ion-card-title> {{ movie.title }} </ion-card-title>
+      <ion-card-subtitle> {{ movie.tagline }} </ion-card-subtitle>
+      <ion-text>
+        <span *ngFor="let g of movie.genres; let isLast = last">
+          {{ g.name }} {{ !isLast ? ' • ' : '' }}
+        </span>
+      </ion-text>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-label> {{ movie.overview }} </ion-label>
+      <ion-item lines="none">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        <ion-label>Release Date</ion-label>
+        <ion-note slot="end"> {{ movie.release_date }} </ion-note>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon name="cash-outline" slot="start"></ion-icon>
+        <ion-label>Budget</ion-label>
+        <ion-note slot="end"> {{ movie.budget | currency:'USD' }} </ion-note>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon name="star-outline" slot="start"></ion-icon>
+        <ion-label>Rating</ion-label>
+        <ion-note slot="end"> {{ movie.vote_average }} / 10 </ion-note>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon name="hourglass-outline" slot="start"></ion-icon>
+        <ion-label>Duration</ion-label>
+        <ion-note slot="end"> {{ movie.runtime }} minutes </ion-note>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+
+<ion-footer>
+  <ion-button expand="full" (click)="openHomePage()"> Movie Home Page </ion-button>
+</ion-footer>
