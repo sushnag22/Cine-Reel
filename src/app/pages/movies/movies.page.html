@@ -8,7 +8,7 @@
   <ion-list>
     <ion-item button *ngFor="let item of movies" [routerLink]="[item.id]" >
       <ion-avatar slot="start">
-        <img [src]="imageBaseUrl + '/w92/' + item.poster_path" />
+        <img [src]="imageBaseUrl + '/w92/' + item.poster_path" alt="movie-icon"/>
       </ion-avatar>
       <ion-label> 
         {{ item.title }}
@@ -21,7 +21,7 @@
   <ion-infinite-scroll (ionInfinite) = "loadMore($event)">
     <ion-infinite-scroll-content 
       loadingSpinner="bubbles" 
-      loadingText="Loading more data..."
+      loadingText="Loading more movies..."
     >
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
