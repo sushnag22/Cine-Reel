@@ -20,13 +20,7 @@ export class MoviesPage implements OnInit {
   }
 
   async loadMovies(event?: InfiniteScrollCustomEvent) {
-    const loading = await this.loadingCntrl.create({
-      message: 'Loading...',
-      spinner: 'crescent',
-    });
-    await loading.present();
     this.movieService.getTopRatedMovies(this.currentPage).subscribe(res => {
-      loading.dismiss();
       this.movies.push(...res.results);
       event?.target.complete();
       if (event) {
